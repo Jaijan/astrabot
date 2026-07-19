@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { Brain, BookOpen, BriefcaseBusiness, Compass, GraduationCap, MessageCircleQuestion, Rocket, Sparkles } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { Card } from '../components/ui/Card';
@@ -21,14 +22,32 @@ const navItems = [
 export default function CareerPage() {
   const { slug } = useParams();
   const { selectCareer, recentCareers } = useAstrabotStore();
-  const career = careers.find((item) => item.slug === slug) ?? careers[0];
+  const career = careers.find((item) => item.slug === slug);
 
-  if (!career) return null;
+  // Track which career was last selected to avoid unnecessary updates
+  useEffect(() => {
+    if (career) {
+      selectCareer(career);
+    }
+  }, [slug]); // Only depend on slug changing
 
-  selectCareer(career);
+  if (!career) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(93,220,255,0.12),_transparent_35%)] text-white">
+        <div className="text-center">
+          <p className="text-lg text-slate-300">Career not found</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <motion.main initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(93,220,255,0.12),_transparent_35%)] px-4 py-8 text-white sm:px-8 lg:px-16">
+    <motion.main 
+      initial={{ opacity: 0, y: 24 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(93,220,255,0.12),_transparent_35%)] px-4 py-8 text-white sm:px-8 lg:px-16"
+    >
       <div className="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row">
         <aside className="lg:sticky lg:top-6 lg:h-fit lg:w-72">
           <Card className="p-5">

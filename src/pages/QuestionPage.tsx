@@ -41,6 +41,10 @@ export default function QuestionPage() {
   };
 
   useEffect(() => {
+    setIsGuessing(false);
+  }, [currentQuestion]);
+
+  useEffect(() => {
     if (guessedCareer) {
       navigate(`/career/${guessedCareer.slug}`);
     }

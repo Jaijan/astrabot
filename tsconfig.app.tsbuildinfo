@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/robot.tsx","./src/components/ui/card.tsx","./src/data/careers.ts","./src/hooks/useastrabot.ts","./src/pages/adminpage.tsx","./src/pages/careerpage.tsx","./src/pages/landingpage.tsx","./src/pages/questionpage.tsx"],"version":"5.9.3"}

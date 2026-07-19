@@ -43,39 +43,39 @@ export default function CareerPage() {
     switch (activeTab) {
       case 'overview':
         return (
-          <div className="space-y-4">
-            <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase text-cyan-300">Why this match</h3>
-              <p className="text-sm text-slate-300">{career.reason}</p>
+          <div className="grid gap-3 grid-cols-3 h-full text-xs">
+            <div className="overflow-hidden flex flex-col">
+              <p className="font-semibold uppercase text-cyan-300 mb-1 flex-shrink-0">Why</p>
+              <p className="text-slate-300 line-clamp-5 text-xs leading-snug">{career.reason}</p>
             </div>
-            <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase text-cyan-300">Education</h3>
-              <ul className="space-y-1 text-sm text-slate-300">
-                {career.education.map((item) => <li key={item}>• {item}</li>)}
+            <div className="overflow-hidden flex flex-col">
+              <p className="font-semibold uppercase text-cyan-300 mb-1 flex-shrink-0">Education</p>
+              <ul className="space-y-0.5 text-slate-300 text-xs overflow-hidden">
+                {career.education.map((item) => <li key={item} className="truncate text-xs">• {item}</li>)}
               </ul>
             </div>
-            <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase text-cyan-300">Demand</h3>
-              <p className="text-sm text-slate-300">{career.demand}</p>
+            <div className="overflow-hidden flex flex-col">
+              <p className="font-semibold uppercase text-cyan-300 mb-1 flex-shrink-0">Demand</p>
+              <p className="text-slate-300 text-xs line-clamp-5 leading-snug">{career.demand}</p>
             </div>
           </div>
         );
       case 'skills':
         return (
-          <div className="space-y-3">
-            <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase text-cyan-300">Technical</h3>
-              <div className="flex flex-wrap gap-2">
-                {career.technicalSkills.slice(0, 5).map((skill) => (
-                  <span key={skill} className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-200">{skill}</span>
+          <div className="grid gap-3 grid-cols-2 h-full">
+            <div className="overflow-hidden">
+              <p className="text-xs font-semibold uppercase text-cyan-300 mb-1 flex-shrink-0">Technical</p>
+              <div className="flex flex-wrap gap-1">
+                {career.technicalSkills.slice(0, 4).map((skill) => (
+                  <span key={skill} className="rounded-full border border-white/10 bg-white/5 px-1.5 py-0.5 text-xs truncate">{skill}</span>
                 ))}
               </div>
             </div>
-            <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase text-cyan-300">Soft Skills</h3>
-              <div className="flex flex-wrap gap-2">
-                {career.softSkills.slice(0, 5).map((skill) => (
-                  <span key={skill} className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-200">{skill}</span>
+            <div className="overflow-hidden">
+              <p className="text-xs font-semibold uppercase text-cyan-300 mb-1 flex-shrink-0">Soft</p>
+              <div className="flex flex-wrap gap-1">
+                {career.softSkills.slice(0, 4).map((skill) => (
+                  <span key={skill} className="rounded-full border border-white/10 bg-white/5 px-1.5 py-0.5 text-xs truncate">{skill}</span>
                 ))}
               </div>
             </div>
@@ -83,61 +83,61 @@ export default function CareerPage() {
         );
       case 'salary':
         return (
-          <div className="space-y-3">
+          <div className="grid gap-4 h-full text-xs">
             <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase text-cyan-300">Compensation</h3>
-              <p className="text-lg font-semibold text-white">{career.salary}</p>
+              <p className="text-xs font-semibold uppercase text-cyan-300">Range</p>
+              <p className="text-lg font-semibold text-white mt-0.5">{career.salary}</p>
             </div>
-            <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase text-cyan-300">Future Outlook</h3>
-              <p className="text-sm text-slate-300">{career.futureScope}</p>
+            <div className="overflow-hidden flex flex-col">
+              <p className="text-xs font-semibold uppercase text-cyan-300 mb-1">Outlook</p>
+              <p className="text-xs text-slate-300 line-clamp-3 leading-snug">{career.futureScope}</p>
             </div>
           </div>
         );
       case 'ai-impact':
         return (
-          <div>
-            <p className="text-sm leading-6 text-slate-300">{career.aiImpact}</p>
+          <div className="h-full overflow-hidden">
+            <p className="text-xs text-slate-300 line-clamp-6 leading-snug">{career.aiImpact}</p>
           </div>
         );
       case 'projects':
         return (
-          <div className="space-y-2">
-            {career.projects.slice(0, 3).map((project) => (
-              <div key={project} className="rounded-lg border border-white/10 bg-white/5 p-2 text-xs text-slate-300">{project}</div>
+          <div className="grid gap-2 grid-cols-2 h-full">
+            {career.projects.slice(0, 4).map((project) => (
+              <div key={project} className="rounded-lg border border-white/10 bg-white/5 p-1.5 text-xs text-slate-300 line-clamp-2 overflow-hidden leading-snug">{project}</div>
             ))}
           </div>
         );
       case 'courses':
         return (
-          <div className="space-y-2">
-            <div>
-              <h3 className="mb-1 text-xs font-semibold uppercase text-cyan-300">Top courses</h3>
-              <ul className="space-y-1 text-xs text-slate-300">
-                {career.courses.slice(0, 3).map((course) => <li key={course}>• {course}</li>)}
+          <div className="grid gap-3 grid-cols-2 h-full text-xs overflow-hidden">
+            <div className="overflow-hidden">
+              <p className="text-xs font-semibold uppercase text-cyan-300 mb-1 flex-shrink-0">Courses</p>
+              <ul className="space-y-0.5 text-slate-300 text-xs overflow-hidden">
+                {career.courses.slice(0, 3).map((course) => <li key={course} className="text-xs truncate">• {course}</li>)}
               </ul>
             </div>
-            <div>
-              <h3 className="mb-1 text-xs font-semibold uppercase text-cyan-300">Books</h3>
-              <ul className="space-y-1 text-xs text-slate-300">
-                {career.books.slice(0, 3).map((book) => <li key={book}>• {book}</li>)}
+            <div className="overflow-hidden">
+              <p className="text-xs font-semibold uppercase text-cyan-300 mb-1 flex-shrink-0">Books</p>
+              <ul className="space-y-0.5 text-slate-300 text-xs overflow-hidden">
+                {career.books.slice(0, 3).map((book) => <li key={book} className="text-xs truncate">• {book}</li>)}
               </ul>
             </div>
           </div>
         );
       case 'interview':
         return (
-          <div className="space-y-2">
+          <div className="grid gap-1 h-full overflow-hidden">
             {career.interviewQuestions.slice(0, 3).map((question) => (
-              <div key={question} className="rounded-lg border border-white/10 bg-white/5 p-2 text-xs text-slate-300">{question}</div>
+              <div key={question} className="rounded-lg border border-white/10 bg-white/5 p-1.5 text-xs text-slate-300 line-clamp-2 overflow-hidden leading-snug">{question}</div>
             ))}
           </div>
         );
       case 'related':
         return (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 h-full content-start overflow-hidden">
             {career.relatedCareers.map((related) => (
-              <Link key={related} to={`/career/${related.toLowerCase().replace(/ /g, '-')}`} className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-200 transition hover:border-cyan-400/40 hover:bg-cyan-400/10">
+              <Link key={related} to={`/career/${related.toLowerCase().replace(/ /g, '-')}`} className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-200 transition hover:border-cyan-400/40 hover:bg-cyan-400/10 truncate">
                 {related}
               </Link>
             ))}
@@ -206,13 +206,13 @@ export default function CareerPage() {
           </div>
 
           {/* Content Area */}
-          <Card className="flex-1 overflow-y-auto p-5">
+          <Card className="flex-1 overflow-hidden p-4">
             <motion.div
               key={activeTab}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="space-y-3"
+              className="h-full overflow-hidden"
             >
               {renderContent()}
               

@@ -50,7 +50,7 @@ export default function QuestionPage() {
     <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_left,_rgba(93,220,255,0.08),_transparent_35%)] px-4 py-8 text-white sm:px-8 lg:px-16">
       <div className="mx-auto flex min-h-[90vh] max-w-7xl flex-col justify-center gap-8 lg:flex-row lg:items-center">
         <div className="flex flex-1 justify-center lg:justify-start">
-          <Robot expression="thinking" />
+          <Robot expression={isGuessing ? 'processing' : 'thinking'} />
         </div>
 
         <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="flex-1 rounded-[32px] border border-white/10 bg-white/5 p-6 shadow-[0_0_80px_rgba(93,220,255,0.10)] backdrop-blur-2xl sm:p-8">
@@ -63,9 +63,17 @@ export default function QuestionPage() {
             <motion.div animate={{ width: `${progress}%` }} className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-400" />
           </div>
 
-          <div className="mb-6 rounded-[24px] border border-cyan-400/20 bg-cyan-400/10 px-5 py-4 text-lg text-cyan-100">
-            {message}
-          </div>
+          {isGuessing ? (
+            <div className="mb-6 rounded-[24px] border border-cyan-400/30 bg-cyan-400/15 px-5 py-4 text-lg text-cyan-100">
+              <motion.div animate={{ opacity: [1, 0.5, 1] }} transition={{ duration: 1.2, repeat: Infinity }}>
+                Making your career discovery...
+              </motion.div>
+            </div>
+          ) : (
+            <div className="mb-6 rounded-[24px] border border-cyan-400/20 bg-cyan-400/10 px-5 py-4 text-lg text-cyan-100">
+              {message}
+            </div>
+          )}
 
           <h2 className="mb-8 text-2xl font-semibold text-white sm:text-3xl">
             {question?.text ?? 'We’ve identified your likely path.'}
@@ -79,4 +87,14 @@ export default function QuestionPage() {
                 disabled={isGuessing}
                 whileHover={!isGuessing ? { scale: 1.02 } : {}}
                 whileTap={!isGuessing ? { scale: 0.98 } : {}}
-                className="rounded-[20px] border border-white/10 bg-slate-950/60 px-4 py-3 text-left text-sm font-medium text-slate-200 transition disabled:
+                className="rounded-[20px] border border-white/10 bg-slate-950/60 px-4 py-3 text-left text-sm font-medium text-slate-200 transition disabled:opacity-50 hover:border-cyan-400/40 hover:bg-cyan-400/10 disabled:hover:border-white/10 disabled:hover:bg-slate-950/60"
+              >
+                {option.label}
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </main>
+  );
+}

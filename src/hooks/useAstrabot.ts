@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { careers, type CareerProfile } from '../data/careers';
+import { requestGuess } from '../lib/api';
 
 export interface Question {
   id: number;
@@ -17,7 +18,7 @@ interface AstrabotState {
   questions: Question[];
   recentCareers: CareerProfile[];
   setAnswer: (questionId: number, answer: string) => void;
-  nextQuestion: () => void;
+  nextQuestion: () => void | Promise<void>;
   reset: () => void;
   revealGuess: () => void;
   selectCareer: (career: CareerProfile) => void;
@@ -65,11 +66,23 @@ export const useAstrabotStore = create<AstrabotState>((set, get) => ({
     const confidence = Math.min(95, 55 + Object.keys(nextAnswers).length * 4);
     set({ answers: nextAnswers, confidence });
   },
-  nextQuestion: () => {
+  nextQuestion: async () => {
     const nextIndex = get().currentQuestion + 1;
     if (nextIndex >= get().questions.length) {
-      const ranked = [...careers].sort((a, b) => scoreCareer(b, get().answers) - scoreCareer(a, get().answers));
-      const best = ranked[0];
+      let best: CareerProfile | undefined;
+
+      try {
+        const result = await requestGuess(get().answers);
+        best = result?.career;
+      } catch (error) {
+        console.warn('Astrabot API unavailable, using local guess fallback.', error);
+      }
+
+      if (!best) {
+        const ranked = [...careers].sort((a, b) => scoreCareer(b, get().answers) - scoreCareer(a, get().answers));
+        best = ranked[0];
+      }
+
       set({ guessedCareer: best, showGuess: true, selectedCareer: best });
       return;
     }

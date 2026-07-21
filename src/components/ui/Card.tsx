@@ -11,11 +11,8 @@ export function Card({ children, className = '', id }: CardProps) {
   return (
     <motion.div
       id={id}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.55 }}
-      className={`rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-2xl shadow-[0_0_80px_rgba(93,220,255,0.08)] ${className}`}
+      whileHover={{ y: -2 }}
+      className={`rounded-lg border border-white/10 bg-white/[0.065] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_18px_60px_rgba(0,0,0,0.22)] backdrop-blur-2xl transition-colors hover:border-cyan-200/20 ${className}`}
     >
       {children}
     </motion.div>

@@ -278,7 +278,8 @@ function ResultPanel({ career, activeTab }: { career: CareerProfile; activeTab: 
       <Surface className="p-4">
         <SectionTitle icon={TrendingUp} eyebrow="Market Outlook" title="Salary, demand, future, and AI impact" />
         <div className="grid gap-3 lg:grid-cols-2">
-          <InsightMetric label="Salary Range" value={career.salary} helper="Varies by market, seniority, and company stage." />
+          <InsightMetric label="Entry salary" value={career.salary.entry} helper={career.salary.note} />
+          <InsightMetric label="Hiring demand" value={`${career.careerStats.hiringDemand}/5`} helper={`Future growth: ${career.careerStats.futureGrowth}`} />
           <InsightMetric label="Demand" value="Strong" helper={career.demand} />
           <div className="rounded-lg border border-white/10 bg-black/20 p-3">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Future Outlook</p>
@@ -442,7 +443,10 @@ export default function CareerPage() {
                 </div>
                 <div className="grid gap-2">
                   <InsightMetric label="Category" value={career.category} helper={career.description} />
-                  <InsightMetric label="Salary" value={career.salary} />
+                  <InsightMetric label="Entry salary" value={career.salary.entry} />
+                  <InsightMetric label="Mid career" value={career.salary.mid} />
+                  <InsightMetric label="Senior" value={career.salary.senior} />
+                  <InsightMetric label="Work-life balance" value={`${career.careerStats.workLifeBalance}/5`} />
                   <InsightMetric label="Demand" value="High" helper={career.demand} />
                 </div>
               </Surface>

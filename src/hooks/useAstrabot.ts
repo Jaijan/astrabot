@@ -2,95 +2,20 @@ import { create } from 'zustand';
 import { careers, type CareerProfile } from '../data/careers';
 import { requestGuess } from '../lib/api';
 
-export interface Question {
-  id: number;
-  text: string;
-  weight: number;
-}
-
-interface AstrabotState {
-  currentQuestion: number;
-  confidence: number;
-  answers: Record<number, string>;
-  selectedCareer: CareerProfile | null;
-  guessedCareer: CareerProfile | null;
-  showGuess: boolean;
-  questions: Question[];
-  recentCareers: CareerProfile[];
-  setAnswer: (questionId: number, answer: string) => void;
-  nextQuestion: () => void | Promise<void>;
-  reset: () => void;
-  revealGuess: () => void;
-  selectCareer: (career: CareerProfile) => void;
-}
-
-const baseQuestions: Question[] = [
-  { id: 1, text: 'Do you enjoy solving complex problems with logic?', weight: 1.2 },
-  { id: 2, text: 'Would you rather build systems than just describe them?', weight: 1.1 },
-  { id: 3, text: 'Do you like creating elegant interfaces and experiences?', weight: 1 },
-  { id: 4, text: 'Are you curious about data, trends, and hidden patterns?', weight: 1.1 },
-  { id: 5, text: 'Do you enjoy leading teams or shaping strategy?', weight: 0.9 },
-  { id: 6, text: 'Would you like your work to influence millions of users?', weight: 1 },
-  { id: 7, text: 'Do you enjoy technical depth and continuous learning?', weight: 1.1 },
-  { id: 8, text: 'Do you care deeply about user empathy and experience?', weight: 0.95 }
-];
-
-const scoreCareer = (career: CareerProfile, answers: Record<number, string>) => {
-  let score = 0;
-  Object.entries(answers).forEach(([id, answer]) => {
-    const questionId = Number(id);
-    const question = baseQuestions.find((item) => item.id === questionId);
-    if (!question) return;
-
-    const responseScore = answer === 'yes' ? 1 : answer === 'probably' ? 0.7 : answer === 'no' ? -0.3 : 0.2;
-    score += question.weight * responseScore;
-  });
-
-  if (career.title.includes('Software')) score += 2.4;
-  if (career.title.includes('Product')) score += 1.8;
-  if (career.title.includes('Data')) score += 1.9;
-  return score;
+export interface Question { id: number; text: string; weight: number; tags: string[] }
+const questionBank: Question[] = [
+  [1,'Do you enjoy working directly with patients or improving health outcomes?',1.4,['patients','healthcare']], [2,'Do you enjoy programming computers and debugging systems?',1.4,['programming']], [3,'Would you rather manage people and operations than build a product yourself?',1.2,['people','management']], [4,'Would you enjoy researching laws, contracts or appearing in court?',1.4,['law']], [5,'Do you enjoy fieldwork, sites, farms or working outdoors?',1.2,['outdoors']], [6,'Would you like to fly aircraft or work with aviation systems?',1.5,['aircraft']], [7,'Would you rather design buildings and physical spaces than software?',1.4,['buildings','design']], [8,'Do you enjoy analysing accounts, markets and financial decisions?',1.3,['numbers','finance']], [9,'Do experiments, evidence and scientific discovery excite you?',1.3,['research','science']], [10,'Do you want to create visual stories, films, music or digital art?',1.3,['creative','media']], [11,'Do you enjoy explaining ideas and helping others learn?',1.2,['teaching']], [12,'Would you be motivated by a structured defence or public-service career?',1.4,['defence']], [13,'Do you like finding patterns in data and using mathematics?',1.3,['data','math']], [14,'Would you enjoy protecting networks and investigating security incidents?',1.4,['security']], [15,'Do you prefer designing physical machines and manufacturing processes?',1.3,['engineering','manufacturing']], [16,'Do you enjoy persuading customers and building commercial relationships?',1.2,['sales','marketing']], [17,'Would you like to work with animals, food or biological systems?',1.2,['biology','agriculture']], [18,'Do you enjoy planning travel, hospitality or guest experiences?',1.2,['hospitality']], [19,'Would you enjoy coaching fitness, sport or wellbeing?',1.2,['sports']], [20,'Do space, satellites and advanced science inspire you?',1.4,['space','science']]
+].map(([id,text,weight,tags]) => ({ id: id as number, text: text as string, weight: weight as number, tags: tags as string[] }));
+const responseValue: Record<string, number> = { yes: 1, probably: .65, 'probably-not': -.45, no: -.75 };
+const rank = (answers: Record<number,string>) => careers.map((career) => ({ career, score: Object.entries(answers).reduce((total,[id,answer]) => { const q = questionBank.find(item => item.id === Number(id)); const overlap = q?.tags.filter(tag => career.matchingTags.includes(tag)).length || 0; return total + (responseValue[answer] ?? 0) * (q?.weight ?? 0) * (overlap ? 1 + overlap : .12); }, 0) })).sort((a,b) => b.score-a.score);
+const confidenceFor = (answers: Record<number,string>) => { const ranked = rank(answers); const gap = Math.max(0, (ranked[0]?.score ?? 0) - (ranked[1]?.score ?? 0)); return Math.min(95, Math.round(35 + Object.keys(answers).length * 4 + gap * 12)); };
+const nextAdaptiveQuestion = (answers: Record<number,string>) => {
+  const used = new Set(Object.keys(answers).map(Number)); const ranked = rank(answers).slice(0, 18);
+  return questionBank.filter(q => !used.has(q.id)).sort((a,b) => {
+    const spread = (q: Question) => new Set(ranked.filter(({career}) => q.tags.some(tag => career.matchingTags.includes(tag))).map(x => x.career.category)).size;
+    return spread(b) - spread(a) || b.weight - a.weight;
+  })[0];
 };
-
-export const useAstrabotStore = create<AstrabotState>((set, get) => ({
-  currentQuestion: 0,
-  confidence: 0,
-  answers: {},
-  selectedCareer: null,
-  guessedCareer: null,
-  showGuess: false,
-  questions: baseQuestions,
-  recentCareers: [],
-  setAnswer: (questionId, answer) => {
-    const nextAnswers = { ...get().answers, [questionId]: answer };
-    const confidence = Math.min(95, 55 + Object.keys(nextAnswers).length * 4);
-    set({ answers: nextAnswers, confidence });
-  },
-  nextQuestion: async () => {
-    const nextIndex = get().currentQuestion + 1;
-    if (nextIndex >= get().questions.length) {
-      let best: CareerProfile | undefined;
-
-      try {
-        const result = await requestGuess(get().answers);
-        best = result?.career;
-      } catch (error) {
-        console.warn('Astrabot API unavailable, using local guess fallback.', error);
-      }
-
-      if (!best) {
-        const ranked = [...careers].sort((a, b) => scoreCareer(b, get().answers) - scoreCareer(a, get().answers));
-        best = ranked[0];
-      }
-
-      set({ guessedCareer: best, showGuess: true, selectedCareer: best });
-      return;
-    }
-    set({ currentQuestion: nextIndex });
-  },
-  reset: () => set({ currentQuestion: 0, confidence: 0, answers: {}, selectedCareer: null, guessedCareer: null, showGuess: false }),
-  revealGuess: () => set({ showGuess: true }),
-  selectCareer: (career) => {
-    set({ selectedCareer: career, recentCareers: [career, ...get().recentCareers.filter((item) => item.slug !== career.slug)].slice(0, 5) });
-  }
-}));
+interface AstrabotState { currentQuestion: number; confidence: number; answers: Record<number,string>; selectedCareer: CareerProfile | null; guessedCareer: CareerProfile | null; showGuess: boolean; questions: Question[]; recentCareers: CareerProfile[]; setAnswer: (id:number, answer:string)=>void; nextQuestion: ()=>void|Promise<void>; reset:()=>void; revealGuess:()=>void; selectCareer:(career:CareerProfile)=>void; }
+const initialQuestions = questionBank.slice(0,8);
+export const useAstrabotStore = create<AstrabotState>((set,get) => ({ currentQuestion:0, confidence:0, answers:{}, selectedCareer:null, guessedCareer:null, showGuess:false, questions:initialQuestions, recentCareers:[], setAnswer:(id,answer) => { const answers={...get().answers,[id]:answer}; set({answers,confidence:confidenceFor(answers)}); }, nextQuestion: async () => { const state=get(); const answerCount=Object.keys(state.answers).length; const confidence=confidenceFor(state.answers); const shouldGuess=(answerCount >= 8 && confidence >=85) || answerCount >=20 || !nextAdaptiveQuestion(state.answers); if (shouldGuess) { let best=rank(state.answers)[0]?.career; try { const remote=await requestGuess(state.answers); best=remote?.career || best; } catch { /* local matching remains available offline */ } set({guessedCareer:best,showGuess:true,selectedCareer:best,confidence}); return; } const next=nextAdaptiveQuestion(state.answers)!; const questions=state.questions.some(q=>q.id===next.id) ? state.questions : [...state.questions,next]; set({questions,currentQuestion:state.currentQuestion+1,confidence}); }, reset:()=>set({currentQuestion:0,confidence:0,answers:{},selectedCareer:null,guessedCareer:null,showGuess:false,questions:initialQuestions}), revealGuess:()=>set({showGuess:true}), selectCareer:(career)=>set({selectedCareer:career,recentCareers:[career,...get().recentCareers.filter(item=>item.slug!==career.slug)].slice(0,5)}) }));

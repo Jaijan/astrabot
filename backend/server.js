@@ -65,6 +65,23 @@ app.get('/api/questions', (_request, response) => {
   response.json({ questions });
 });
 
+app.post('/api/questions/next', (request, response) => {
+  const answers = request.body?.answers || {};
+  const used = new Set(Object.keys(answers).map(Number));
+  const ranked = [...careers]
+    .map((career) => ({ career, score: scoreCareer(career, answers) }))
+    .sort((a, b) => b.score - a.score);
+  const gap = Math.max(0, (ranked[0]?.score || 0) - (ranked[1]?.score || 0));
+  const confidence = Math.min(95, Math.round(35 + used.size * 4 + gap * 12));
+  const next = questions
+    .filter((question) => !used.has(question.id))
+    .sort((a, b) => {
+      const breadth = (question) => new Set(ranked.slice(0, 18).filter(({ career }) => question.tags.some((tag) => career.matchingTags.includes(tag))).map(({ career }) => career.category)).size;
+      return breadth(b) - breadth(a) || b.weight - a.weight;
+    })[0] || null;
+  response.json({ question: next, confidence, shouldGuess: (used.size >= 8 && confidence >= 85) || used.size >= 20 || !next });
+});
+
 app.get('/api/careers', (_request, response) => {
   response.json({ careers });
 });
@@ -107,10 +124,12 @@ app.post('/api/guess', (request, response) => {
     .sort((a, b) => b.score - a.score);
 
   const best = ranked[0]?.career;
+  const gap = Math.max(0, (ranked[0]?.score || 0) - (ranked[1]?.score || 0));
+  const confidence = Math.min(95, Math.round(35 + Object.keys(answers).length * 4 + gap * 12));
 
   response.json({
     career: best,
-    confidence: best?.confidence ?? 0,
+    confidence,
     ranked: ranked.map((item) => ({
       slug: item.career.slug,
       title: item.career.title,

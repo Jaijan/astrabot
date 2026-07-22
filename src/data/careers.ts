@@ -1,125 +1,40 @@
+export interface Salary { entry: string; mid: string; senior: string; note: string }
+export interface CareerStats { entrySalary: string; hiringDemand: number; workLifeBalance: number; aiRisk: 'Very Low' | 'Low' | 'Medium' | 'High' | 'Very High'; futureGrowth: 'Very Low' | 'Low' | 'Moderate' | 'High' | 'Very High' }
 export interface CareerProfile {
-  slug: string;
-  title: string;
-  description: string;
-  category: string;
-  confidence: number;
-  reason: string;
-  skills: string[];
-  education: string[];
-  salary: string;
-  futureScope: string;
-  aiImpact: string;
-  relatedCareers: string[];
-  certifications: string[];
-  books: string[];
-  courses: string[];
-  videos: string[];
-  projects: string[];
-  companies: string[];
-  interviewQuestions: string[];
-  softSkills: string[];
-  technicalSkills: string[];
-  growthRoadmap: string[];
-  dailyRoutine: string[];
-  faqs: Array<{ question: string; answer: string }>;
-  overview: string;
-  demand: string;
-  visualTraits: string[];
+  slug: string; title: string; description: string; category: string; confidence: number; reason: string;
+  skills: string[]; education: string[]; salary: Salary; careerStats: CareerStats; futureScope: string; aiImpact: string;
+  relatedCareers: string[]; certifications: string[]; books: string[]; courses: string[]; videos: string[];
+  projects: string[]; companies: string[]; interviewQuestions: string[]; softSkills: string[]; technicalSkills: string[];
+  growthRoadmap: string[]; dailyRoutine: string[]; faqs: Array<{ question: string; answer: string }>; overview: string; demand: string; visualTraits: string[];
+  matchingTags: string[];
 }
 
-export const careers: CareerProfile[] = [
-  {
-    slug: 'software-engineer',
-    title: 'Software Engineer',
-    description: 'Builds resilient products, systems, and digital experiences that shape modern life.',
-    category: 'Technology',
-    confidence: 92,
-    reason: 'Your answers suggest a strong preference for systems thinking, problem-solving, and iterative creation.',
-    skills: ['TypeScript', 'Distributed Systems', 'Architecture', 'Testing'],
-    education: ['Computer Science Degree', 'Practical engineering portfolio'],
-    salary: '$140k-$220k',
-    futureScope: 'Demand remains exceptionally strong as software powers every industry.',
-    aiImpact: 'AI will automate repetitive implementation tasks, increasing the value of design, orchestration, and product judgment.',
-    relatedCareers: ['Product Manager', 'Data Scientist', 'ML Engineer'],
-    certifications: ['AWS Certified Developer', 'Google Cloud Professional'],
-    books: ['Clean Code', 'Designing Data-Intensive Applications'],
-    courses: ['CS50', 'Frontend Masters'],
-    videos: ['System Design by Gaurav Sen', 'The Pragmatic Engineer'],
-    projects: ['Build a full-stack AI assistant', 'Design a distributed event platform'],
-    companies: ['OpenAI', 'Stripe', 'Google'],
-    interviewQuestions: ['Design a URL shortener', 'How would you scale a chat system?'],
-    softSkills: ['Communication', 'Leadership', 'Critical Thinking'],
-    technicalSkills: ['Algorithms', 'Cloud', 'Databases', 'APIs'],
-    growthRoadmap: ['Learn systems design', 'Ship production apps', 'Mentor junior engineers'],
-    dailyRoutine: ['Review metrics', 'Code with testing', 'Collaborate with designers and PMs'],
-    faqs: [
-      { question: 'Is software engineering still worth it?', answer: 'Yes, especially for those who combine coding with product, systems, and communication skills.' }
-    ],
-    overview: 'Software engineering is a high-impact career that turns ideas into reliable products used by millions.',
-    demand: 'Persistent demand across startups, enterprise, and AI companies.',
-    visualTraits: ['Analytical', 'Structured', 'Productive']
-  },
-  {
-    slug: 'product-designer',
-    title: 'Product Designer',
-    description: 'Designs elegant, intuitive products that blend human needs with technical possibilities.',
-    category: 'Design',
-    confidence: 84,
-    reason: 'Your profile leans toward empathy, visual thinking, and crafting delightful interactions.',
-    skills: ['Figma', 'UX Research', 'Design Systems', 'Interaction Design'],
-    education: ['Design bootcamp or degree', 'Portfolio of end-to-end experiences'],
-    salary: '$110k-$180k',
-    futureScope: 'Designers who can pair strategy, storytelling, and AI prototyping will stay in high demand.',
-    aiImpact: 'Generative AI will speed concepting, but strong UX judgment remains essential.',
-    relatedCareers: ['UX Researcher', 'Design Strategist', 'Product Manager'],
-    certifications: ['Google UX Design', 'IDEO Design Thinking'],
-    books: ['Don’t Make Me Think', 'The Design of Everyday Things'],
-    courses: ['Google UX Design Certificate', 'Coursera Interaction Design'],
-    videos: ['Refactoring UI', 'Design Systems Weekly'],
-    projects: ['Redesign a fintech onboarding flow', 'Create a premium AI dashboard'],
-    companies: ['Apple', 'Notion', 'Figma'],
-    interviewQuestions: ['How do you validate a design hypothesis?', 'Describe your design process from research to launch.'],
-    softSkills: ['Empathy', 'Storytelling', 'Collaboration'],
-    technicalSkills: ['Design Tools', 'Prototyping', 'Accessibility', 'Research'],
-    growthRoadmap: ['Build a strong portfolio', 'Learn systems thinking', 'Understand product metrics'],
-    dailyRoutine: ['Research user pain points', 'Prototype flows', 'Collaborate with engineers'],
-    faqs: [
-      { question: 'Do I need to code to be a designer?', answer: 'Not necessarily, but coding literacy improves collaboration and execution.' }
-    ],
-    overview: 'Product designers turn complex needs into intuitive interfaces and compelling product journeys.',
-    demand: 'Strong demand for designers who can connect business goals and user experience.',
-    visualTraits: ['Empathetic', 'Creative', 'Visionary']
-  },
-  {
-    slug: 'data-scientist',
-    title: 'Data Scientist',
-    description: 'Transforms ambiguity into insight and strategic action through analysis and modeling.',
-    category: 'Data',
-    confidence: 81,
-    reason: 'You appear drawn to patterns, rigorous reasoning, and turning information into leverage.',
-    skills: ['Python', 'Statistics', 'ML', 'SQL'],
-    education: ['Statistics or CS degree', 'Portfolio of analytics projects'],
-    salary: '$125k-$210k',
-    futureScope: 'Data science remains critical as organizations seek better decisions and automation.',
-    aiImpact: 'AI tools expand throughput, but the need for experimentation and causal reasoning persists.',
-    relatedCareers: ['ML Engineer', 'Analytics Engineer', 'Research Scientist'],
-    certifications: ['Google Data Analytics', 'AWS Machine Learning'],
-    books: ['Hands-On Machine Learning', 'Think Stats'],
-    courses: ['Fast.ai', 'DeepLearning.AI'],
-    videos: ['StatQuest', 'Made with ML'],
-    projects: ['Forecast churn for a subscription product', 'Build an explainable recommender'],
-    companies: ['Meta', 'Netflix', 'Palantir'],
-    interviewQuestions: ['How do you evaluate a model?', 'What metrics would you use for a recommendation system?'],
-    softSkills: ['Curiosity', 'Communication', 'Judgment'],
-    technicalSkills: ['Python', 'SQL', 'Experimentation', 'Visualization'],
-    growthRoadmap: ['Master statistics', 'Build end-to-end projects', 'Learn ML deployment'],
-    dailyRoutine: ['Explore data', 'Train models', 'Translate insights to stakeholders'],
-    faqs: [
-      { question: 'Is data science still a good path?', answer: 'Yes, especially for those who pair analysis with business context and communication.' }
-    ],
-    overview: 'Data scientists quantify uncertainty and guide smarter business and product decisions.',
-    demand: 'High demand in finance, healthcare, e-commerce, and AI-native companies.',
-    visualTraits: ['Curious', 'Analytical', 'Adaptive']
-  }
+type Definition = [string, string, string[]];
+const definitions: Definition[] = [
+  ['Accountant','Finance',['numbers','finance','office']],['Aerospace Engineer','Engineering',['engineering','aircraft','science']],['Agricultural Scientist','Agriculture',['science','outdoors','agriculture']],['Air Force Officer','Government',['defence','aircraft','leadership']],['AI Engineer','Artificial Intelligence',['programming','ai','math']],['Animator','Creative',['art','design','media']],['Architect','Architecture',['design','buildings','math']],['AR/VR Developer','Technology',['programming','design','ai']],['Bank PO','Government',['banking','numbers','public']],['Biomedical Engineer','Engineering',['healthcare','engineering','science']],['Biotechnologist','Science',['biology','research','lab']],['Blockchain Developer','Technology',['programming','finance','systems']],['Business Analyst','Business',['data','business','office']],['CA','Finance',['numbers','finance','law']],['Chemical Engineer','Engineering',['chemistry','engineering','manufacturing']],['Civil Engineer','Engineering',['engineering','outdoors','buildings']],['Cloud Engineer','Technology',['programming','cloud','systems']],['Content Creator','Media',['media','writing','creative']],['Content Writer','Media',['writing','research','creative']],['Counsellor','Healthcare',['people','psychology','healthcare']],['Cybersecurity Analyst','Cybersecurity',['programming','security','systems']],['Data Analyst','Data',['data','numbers','business']],['Data Engineer','Data',['programming','data','systems']],['Data Scientist','Data',['data','math','research']],['Defence Officer','Government',['defence','leadership','outdoors']],['Dentist','Healthcare',['healthcare','patients','science']],['DevOps Engineer','Technology',['programming','cloud','systems']],['Dietitian','Healthcare',['healthcare','biology','people']],['Digital Marketer','Marketing',['marketing','data','creative']],['Doctor','Healthcare',['healthcare','patients','science']],['Drone Engineer','Engineering',['engineering','aircraft','programming']],['Economist','Finance',['numbers','research','policy']],['Electrical Engineer','Engineering',['engineering','math','manufacturing']],['Electronics Engineer','Engineering',['engineering','electronics','systems']],['Embedded Systems Engineer','Engineering',['programming','electronics','engineering']],['Environmental Scientist','Science',['science','outdoors','research']],['Event Manager','Hospitality',['people','management','creative']],['Fashion Designer','Design',['design','art','creative']],['Film Maker','Media',['media','creative','people']],['Financial Analyst','Finance',['numbers','finance','business']],['Food Technologist','Science',['science','manufacturing','biology']],['Forensic Scientist','Science',['science','research','law']],['Game Developer','Technology',['programming','games','design']],['Graphic Designer','Design',['design','art','creative']],['Hotel Manager','Hospitality',['people','management','hospitality']],['HR Manager','Business',['people','management','business']],['IAS Officer','Government',['policy','leadership','public']],['Industrial Designer','Design',['design','engineering','manufacturing']],['Interior Designer','Design',['design','buildings','creative']],['Investment Banker','Finance',['finance','numbers','business']],['Journalist','Media',['writing','research','media']],['Judge','Law',['law','public','writing']],['Lawyer','Law',['law','writing','people']],['Machine Learning Engineer','Artificial Intelligence',['programming','ai','math']],['Manufacturing Engineer','Engineering',['engineering','manufacturing','systems']],['Marine Engineer','Engineering',['engineering','outdoors','systems']],['Market Research Analyst','Marketing',['research','data','marketing']],['Mechanical Engineer','Engineering',['engineering','manufacturing','math']],['Medical Lab Technologist','Healthcare',['healthcare','lab','science']],['Merchant Navy Officer','Government',['outdoors','engineering','leadership']],['Microbiologist','Science',['biology','lab','research']],['Mobile App Developer','Technology',['programming','design','systems']],['Music Producer','Creative',['music','creative','media']],['Navy Officer','Government',['defence','outdoors','leadership']],['Nurse','Healthcare',['healthcare','patients','people']],['Nutritionist','Healthcare',['healthcare','biology','people']],['Operations Manager','Business',['management','business','systems']],['Patent Analyst','Law',['law','science','research']],['Pharmacist','Healthcare',['healthcare','chemistry','people']],['Photographer','Creative',['creative','media','art']],['Pilot','Aviation',['aircraft','outdoors','science']],['Police Officer','Government',['public','outdoors','law']],['Product Manager','Business',['business','management','technology']],['Professor','Education',['teaching','research','people']],['Psychologist','Healthcare',['psychology','people','research']],['Public Policy Analyst','Government',['policy','research','writing']],['Radiologist','Healthcare',['healthcare','science','patients']],['Railway Engineer','Government',['engineering','public','systems']],['Research Scientist','Science',['research','science','lab']],['Robotics Engineer','Engineering',['engineering','programming','ai']],['Sales Manager','Sales',['people','business','management']],['School Teacher','Education',['teaching','people','public']],['SEO Specialist','Marketing',['marketing','data','writing']],['Software Engineer','Technology',['programming','systems','technology']],['Space Scientist','Science',['science','research','space']],['Sports Coach','Sports',['sports','people','outdoors']],['Sports Manager','Sports',['sports','management','business']],['SSC Officer','Government',['public','policy','office']],['Supply Chain Manager','Business',['management','systems','manufacturing']],['Surgeon','Healthcare',['healthcare','patients','science']],['Technical Writer','Media',['writing','technology','research']],['Tourism Manager','Hospitality',['hospitality','people','management']],['UI/UX Designer','Design',['design','people','technology']],['UPSC Officer','Government',['policy','leadership','public']],['Urban Planner','Architecture',['buildings','policy','outdoors']],['UX Researcher','Design',['research','people','design']],['Veterinarian','Healthcare',['healthcare','biology','outdoors']],['Video Editor','Media',['media','creative','technology']],['Web Developer','Technology',['programming','design','technology']],['Wildlife Biologist','Science',['biology','outdoors','research']],['Wind Energy Engineer','Engineering',['engineering','outdoors','science']],['Yoga Instructor','Sports',['healthcare','people','sports']]
 ];
+
+const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const salaries: Record<string, Salary> = {
+  Healthcare: { entry: '₹3–6 LPA', mid: '₹7–14 LPA', senior: '₹15–35 LPA', note: 'Specialist practice and location can materially change earnings.' },
+  Government: { entry: '₹3–7 LPA', mid: '₹7–14 LPA', senior: '₹12–22 LPA', note: 'Pay follows government pay matrices and allowances.' },
+  default: { entry: '₹3–6 LPA', mid: '₹7–12 LPA', senior: '₹14–28 LPA', note: 'Indicative India salary; varies by city, employer and capability.' }
+};
+const educationByCategory: Record<string, string[]> = {
+  Healthcare: ['Relevant degree: MBBS, BDS, BSc Nursing, BPharm or allied-health programme', 'NEET or institution-specific admission where applicable', 'Clinical internship and state registration where required'],
+  Government: ['Bachelor’s degree or role-specific qualification', 'Prepare for UPSC, SSC, IBPS, NDA/CDS or departmental examination', 'Build current-affairs, aptitude and fitness discipline'],
+  Engineering: ['B.Tech/BE, Diploma or relevant BSc programme', 'JEE Main, state CET or institute entrance where applicable', 'Internships, CAD/programming portfolio and GATE for higher study'],
+  Design: ['BDes, NID/NIFT pathway or a focused portfolio', 'NID DAT, UCEED or NIFT entrance where applicable', 'Document end-to-end projects in a portfolio'],
+  Finance: ['BCom/BBA/BA Economics or MBA Finance', 'CA, CMA, CFA or FRM pathway depending on the role', 'Excel, accounting and internship experience'],
+  Law: ['5-year BA LLB/BBA LLB or 3-year LLB', 'CLAT, AILET or state entrance as applicable', 'Internships, moot courts and Bar Council requirements'],
+  default: ['Relevant bachelor’s degree, diploma or recognised vocational programme', 'Use NPTEL, SWAYAM and internships to build proof of work', 'Consider a specialised master’s degree or certification after foundations']
+};
+
+function makeCareer([title, category, matchingTags]: Definition, index: number): CareerProfile {
+  const salary = salaries[category] || salaries.default;
+  const technicalSkills = [...new Set([...matchingTags.map((tag) => tag[0].toUpperCase() + tag.slice(1)), 'Domain fundamentals', 'Problem solving', 'Digital tools'])];
+  return { slug: slugify(title), title, category, matchingTags, confidence: 88, description: `Build a rewarding ${title} career in India through practical skills, recognised education and evidence of work.`, reason: `Your responses align with the ${matchingTags.join(', ')} signals common in this career.`, skills: technicalSkills, education: educationByCategory[category] || educationByCategory.default, salary, careerStats: { entrySalary: salary.entry, hiringDemand: category === 'Healthcare' || category === 'Technology' ? 5 : 4, workLifeBalance: category === 'Government' ? 4 : 3, aiRisk: matchingTags.includes('creative') ? 'Medium' : 'Low', futureGrowth: category === 'Technology' || category === 'Healthcare' ? 'Very High' : 'High' }, futureScope: `India’s ${category.toLowerCase()} ecosystem continues to create opportunities for skilled, adaptable professionals.`, aiImpact: 'AI will automate routine work; domain expertise, judgment, communication and accountable execution remain valuable.', relatedCareers: [], certifications: ['NPTEL/SWAYAM domain course', 'Google or Microsoft career certificate', 'NSDC / Skill India role-aligned credential'], books: [`Introduction to ${title}`, 'The Pragmatic Professional'], courses: ['NPTEL: relevant IIT course', 'SWAYAM: career foundation course', 'Coursera: job-ready specialisation'], videos: ['NPTEL lecture series', 'IIT Bombay / IIT Madras public lectures', 'Career guidance from official institutions'], projects: [`Foundation project: document a ${title} problem`, `Applied project: solve a realistic India-focused case`, `Portfolio project: publish measurable results and reflection`], companies: ['TCS', 'Infosys', 'Wipro', 'Reliance', 'L&T', 'Government/PSU opportunities'], interviewQuestions: [`How have you prepared for a ${title} role?`, `Describe a project where you used ${technicalSkills[0]}.`, 'How do you learn from feedback and changing requirements?'], softSkills: ['Communication', 'Collaboration', 'Ethical judgment', 'Time management'], technicalSkills, growthRoadmap: ['Build foundations through a recognised course', 'Complete an internship, apprenticeship or portfolio project', 'Develop depth and take on higher-responsibility work'], dailyRoutine: ['Plan priority work and review requirements', 'Use domain tools to solve practical problems', 'Collaborate with stakeholders and improve outcomes'], faqs: ['What education do I need?','Can I enter without a premium college?','What should I include in my portfolio?','Which Indian cities hire for this role?','How can I grow after my first job?'].map((question) => ({ question, answer: `${title} candidates benefit from structured learning, practical experience and consistent evidence of capability. Requirements vary by employer and regulated roles.` })), overview: `${title} is an India-relevant career path for people interested in ${matchingTags.join(', ')}.`, demand: `Hiring demand is ${category === 'Technology' || category === 'Healthcare' ? 'strong' : 'steady'} across Indian employers, services firms, startups and public-sector organisations.`, visualTraits: matchingTags.map((tag) => tag[0].toUpperCase() + tag.slice(1)) };
+}
+
+export const careers: CareerProfile[] = definitions.sort((a,b) => a[0].localeCompare(b[0])).map(makeCareer);
+careers.forEach((career, index) => { career.relatedCareers = [1, 2, 3, 4].map((offset) => careers[(index + offset) % careers.length].title); });
